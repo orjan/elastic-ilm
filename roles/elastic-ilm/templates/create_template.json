@@ -1,0 +1,13 @@
+{
+  "index_patterns": [
+    "ilm-mylogs-*" 
+  ],
+  "settings": {
+    "index": {
+      "lifecycle": {
+        "name": "mylogs_condensed_policy", 
+        "rollover_alias": "mylogs" 
+      }
+    }
+  }
+}

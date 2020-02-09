@@ -1,0 +1,16 @@
+---
+- name: Debug template
+  debug:
+    var: item
+- name: Queue build of a project in Jenkins
+  uri:
+    url: http://localhost:9200/{{ item.key }}
+    method: GET
+    status_code: "200, 404"
+  register: alias_result
+- name: Queue build of a project in Jenkins
+  uri:
+    url: http://localhost:9200/_template/{{ item.key }}_template
+    method: PUT
+    body: "{{ lookup('template', 'create_template.json') }}"
+    body_format: json

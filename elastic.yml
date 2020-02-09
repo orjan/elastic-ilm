@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+    - name: "Pong"
+      ping:
+    - name: "Configure ilm"
+      import_role:
+        name: elastic-ilm
