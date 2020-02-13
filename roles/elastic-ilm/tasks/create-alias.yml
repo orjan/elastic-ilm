@@ -1,19 +1,19 @@
 ---
 - name: Create index group template
   uri:
-    url: http://localhost:9200/_template/{{ item.key }}
+    url: "{{ elastic_host }}/_template/{{ item.key }}"
     method: PUT
     body: "{{ lookup('template', 'create-template.json') }}"
     body_format: json
 - name: Check if write alias exists
   uri:
-    url: http://localhost:9200/{{ item.key }}-alias
+    url: "{{ elastic_host }}/{{ item.key }}-alias"
     method: GET
     status_code: "200, 404"
   register: alias_result
 - name: Create write alias
   uri:
-    url: "http://localhost:9200/%3C{{ item.key }}-%7Bnow%2Fd%7D-000001%3E"
+    url: "{{ elastic_host }}/%3C{{ item.key }}-%7Bnow%2Fd%7D-000001%3E"
     method: PUT
     body: "{{ lookup('template', 'create-write-alias.json') }}"
     body_format: json

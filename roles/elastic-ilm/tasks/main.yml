@@ -2,7 +2,7 @@
 # tasks file for elastic-ilm
 - name: Create lifecycle policies
   uri:
-    url: "http://localhost:9200/_ilm/policy/{{ item }}"
+    url: "{{ elastic_host }}/_ilm/policy/{{ item }}"
     method: PUT
     body: "{{ lookup('template', 'lifecycle-policies/{{ item }}.json.j2') }}"
     body_format: json
