@@ -1,12 +1,12 @@
 {
   "index_patterns": [
-    "{{ item.key }}-*" 
+    "{{ item.key }}-*"
   ],
   "settings": {
     "index": {
       "lifecycle": {
-        "name": "{{ item.value }}", 
-        "rollover_alias": "{{ item.key }}-alias" 
+        "name": "{{ item.value }}",
+        "rollover_alias": "{{ item.key }}-alias"
       }
     }
   }
