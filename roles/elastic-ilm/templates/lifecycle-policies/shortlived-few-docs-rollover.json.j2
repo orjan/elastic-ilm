@@ -1,0 +1,52 @@
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_age": "30d",
+            "max_size": "50gb",
+            "max_docs": 10
+          },
+          "set_priority": {
+            "priority": 100
+          }
+        }
+      },
+      "warm": {
+        "actions": {
+          "allocate": {
+            "number_of_replicas": 0
+          },
+          "forcemerge": {
+            "max_num_segments": 1
+          },
+          "shrink": {
+            "number_of_shards": 1
+          },
+          "set_priority": {
+            "priority": 50
+          }
+        }
+      },
+      "cold": {
+        "min_age": "1h",
+        "actions": {
+          "allocate": {
+            "number_of_replicas": 0
+          },
+          "freeze": {},
+          "set_priority": {
+            "priority": 0
+          }
+        }
+      },
+      "delete": {
+        "min_age": "2d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}

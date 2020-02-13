@@ -1,17 +1,12 @@
 ---
 # tasks file for elastic-ilm
-- name: Queue build of a project in Jenkins
+- name: Create lifecycle policies
   uri:
-    url: http://localhost:9200/test-logs-foo
-    method: GET
-    status_code: "200, 404"
-  register: alias_result
-- name: "Dbg"
-  debug:
-    var: alias_result
-  when: alias_result.status == 404
-- name: "Create templates"
-  include_tasks: create_alias.yml
+    url: "http://localhost:9200/_ilm/policy/{{ item }}"
+    method: PUT
+    body: "{{ lookup('template', 'lifecycle-policies/{{ item }}.json.j2') }}"
+    body_format: json
+  with_items: "{{ lifecycle_polices }}"
+- name: "Create index template and write alias"
+  include_tasks: create-alias.yml
   with_dict: "{{ template_mappings }}"
-# systemconfiguration_json: "{{ lookup('template', 'systemconfiguration_json.j2') }}"
-# https://stackoverflow.com/a/39041069/191975

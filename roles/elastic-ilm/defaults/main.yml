@@ -3,3 +3,5 @@
 template_mappings:
   my-index: bar
   my-index2: bar2
+lifecycle_polices:
+  - shortlived-few-docs-rollover
