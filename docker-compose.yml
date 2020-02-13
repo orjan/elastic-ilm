@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
     networks:
       - backend
     ports:
@@ -12,7 +12,7 @@ services:
       xpack.monitoring.enabled: "true"
       xpack.monitoring.collection.enabled: "true"
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.5.2
+    image: docker.elastic.co/kibana/kibana:7.6.0
     networks:
       - backend
     ports:
@@ -21,7 +21,7 @@ services:
       xpack.monitoring.enabled: "true"
       xpack.monitoring.collection.enabled: "true"
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.5.2
+    image: docker.elastic.co/logstash/logstash:7.6.0
     networks:
       - backend
     volumes:
