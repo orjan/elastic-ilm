@@ -1,7 +1,6 @@
 ---
 # defaults file for elastic-ilm
 template_mappings:
-  my-index: bar
-  my-index2: bar2
+  my-index: shortlived-few-docs-rollover
 lifecycle_polices:
   - shortlived-few-docs-rollover

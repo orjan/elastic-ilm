@@ -1,16 +1,20 @@
 ---
-- name: Debug template
-  debug:
-    var: item
-- name: Queue build of a project in Jenkins
+- name: Create index group template
   uri:
-    url: http://localhost:9200/{{ item.key }}
+    url: http://localhost:9200/_template/{{ item.key }}
+    method: PUT
+    body: "{{ lookup('template', 'create-template.json') }}"
+    body_format: json
+- name: Check if write alias exists
+  uri:
+    url: http://localhost:9200/{{ item.key }}-alias
     method: GET
     status_code: "200, 404"
   register: alias_result
-- name: Queue build of a project in Jenkins
+- name: Create write alias
   uri:
-    url: http://localhost:9200/_template/{{ item.key }}_template
+    url: "http://localhost:9200/%3C{{ item.key }}-%7Bnow%2Fd%7D-000001%3E"
     method: PUT
-    body: "{{ lookup('template', 'create_template.json') }}"
+    body: "{{ lookup('template', 'create-write-alias.json') }}"
     body_format: json
+  when: alias_result.status == 404
