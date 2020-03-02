@@ -5,7 +5,7 @@
   "settings": {
     "index": {
       "lifecycle": {
-        "name": "{{ item.value }}",
+        "name": "{{ index_types[item.value].ilm }}",
         "rollover_alias": "{{ item.key }}-alias"
       }
     }

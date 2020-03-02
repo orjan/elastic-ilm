@@ -3,7 +3,7 @@
   uri:
     url: "{{ elastic_host }}/_template/{{ item.key }}"
     method: PUT
-    body: "{{ lookup('template', 'create-template.json') }}"
+    body: "{{ lookup('template', 'create-' + index_types[item.value].template + '-template.json') }}"
     body_format: json
 - name: Check if write alias exists
   uri:

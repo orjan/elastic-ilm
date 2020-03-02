@@ -2,7 +2,12 @@
 # defaults file for elastic-ilm
 elastic_host: http://localhost:9200
 template_mappings:
-  my-index: shortlived-few-docs-rollover
-  hello-from-fluent-bit: shortlived-few-docs-rollover
+  my-index: ver_default
+  hello-from-fluent-bit: ver_default
+  hello-from-fluent-bit-new: ver_default
+index_types:
+  ver_default:
+    ilm: shortlived-few-docs-rollover
+    template: default
 lifecycle_polices:
   - shortlived-few-docs-rollover
