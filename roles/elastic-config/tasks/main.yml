@@ -1,0 +1,71 @@
+---
+- name: Wait for a green cluster before we start
+  uri:
+    url: http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=15s
+  register: _result
+  until: _result.status == 200
+  retries: 4
+  delay: 5
+
+- name: Turn off allocations of shards
+  uri:
+    url: http://localhost:9200/_cluster/settings
+    method: PUT
+    body: "{{ lookup('file','routing-allocation-off.json') }}"
+    body_format: json
+
+- name: Flush shards
+  uri:
+    url: http://localhost:9200/_flush/synced
+    method: POST
+    status_code:
+      - 200
+      - 409
+  register: result_flush
+
+- name: Debug
+  debug:
+    var: result_flush.json['_shards']
+
+- name: Turn off upgrade mode for ML
+  uri:
+    url: http://localhost:9200/_ml/set_upgrade_mode?enabled=true
+    method: POST
+
+## TODO
+### Shut down service
+### Install Elastic
+### Fix configuration
+### Start service
+
+- name: Fake wait for manual restart
+  pause:
+    minutes: "5"
+
+- name: Wait until we will get a connection to the node
+  uri:
+    url: "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=15s"
+  register: _result
+  until: _result.status == 200
+  retries: 40
+  delay: 5
+
+- name: Turn on allocations of shards
+  uri:
+    url: http://localhost:9200/_cluster/settings
+    method: PUT
+    body: "{{ lookup('file','routing-allocation-on.json') }}"
+    body_format: json
+
+- name: Turn off upgrade mode for ML
+  uri:
+    url: http://localhost:9200/_ml/set_upgrade_mode?enabled=true
+    method: POST
+
+- name: Wait until we will get a connection to the node
+  uri:
+    url: "http://localhost:9200/_cluster/health?wait_for_status=green&timeout=15s"
+  register: _result
+  until: _result.status == 200
+  retries: 40
+  delay: 5

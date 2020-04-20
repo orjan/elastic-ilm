@@ -5,4 +5,4 @@
       ping:
     - name: "Configure ilm"
       import_role:
-        name: elastic-config
+        name: elastic-ilm
