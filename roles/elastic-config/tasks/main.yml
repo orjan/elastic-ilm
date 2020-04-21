@@ -1,9 +1,9 @@
 ---
 - name: Wait for a green cluster before we start
   uri:
-    url: http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=15s
-  register: _result
-  until: _result.status == 200
+    url: http://localhost:9200/_cluster/health?wait_for_status=green&timeout=15s
+  register: initial_health
+  until: initial_health.status == 200
   retries: 4
   delay: 5
 
@@ -23,7 +23,7 @@
       - 409
   register: result_flush
 
-- name: Debug
+- name: Result from calling POST _flush/synced
   debug:
     var: result_flush.json['_shards']
 
@@ -65,7 +65,7 @@
 - name: Wait until we will get a connection to the node
   uri:
     url: "http://localhost:9200/_cluster/health?wait_for_status=green&timeout=15s"
-  register: _result
-  until: _result.status == 200
+  register: final_health
+  until: final_health.status == 200
   retries: 40
   delay: 5

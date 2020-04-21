@@ -1,0 +1,30 @@
+---
+- hosts: all
+  vars:
+    backup_dir: /Users/orjan/Code/ica/elk/backup
+  tasks:
+    - name: Create fake backup # With a human reable name e.g. 20200420T215229
+      file: 
+        path: "{{ backup_dir }}/{{ ansible_date_time.iso8601_basic_short }}"
+        state: directory
+    # An extra thing would be to write, ansible_date_time.iso8601_basic_short to a file in the,
+    # backup directory so we can find it. Another option would be to have a symlink from latest folder
+    - name: Find backups # All files in the folder
+      find:
+        paths: "{{ backup_dir }}"
+        file_type: directory
+      register: result
+    - name: Filter out old backups # Sort by modification date -> select path -> all except 2 newest
+      set_fact:
+        old_backups: "{{ (result.files|
+                      sort(attribute='mtime')|
+                      map(attribute='path')|
+                      list)[0:-2] }}"
+                      # One option would be to sort by path since it should sortable
+    - debug: var=old_backups
+    - name: Remove old backups
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items: "{{ old_backups }}"
+
